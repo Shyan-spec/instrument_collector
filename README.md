@@ -204,7 +204,7 @@ django_heroku.settings(locals())
 
 #### Step 1: 
 
-Go to https://dashboard.heroku.com/apps and create a new project, call it something like this: django-catcollector.
+Go to [heroku](https://dashboard.heroku.com/apps) and create a new project, call it something like this: django-catcollector.
 
 #### Step 2: 
 Go to the deploy tab, next select github as your method of connecting the git repo that you want to deploy. `django-catcollector`
