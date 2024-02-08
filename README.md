@@ -178,6 +178,31 @@ Step 2: Go to the deploy tab, next select github as your method of connecting th
 
 Step 3: Once you have connected the repo, select the branch that you want to deploy. In this case we are deploying the `heroku-deployment` branch.
 
+Step 4: Go to the resources tab and in the search bar for addons, search `heroku postgres`. 
+![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2010.30.07%20PM.png)
+
+### WARNING
+Make sure that you select the `mini` option for the Plan name. This has a maximum charge of $5 dollars on it, it's the cheapest option and best choice for our purposes. If you select an expensive plan and your database credentials are leaked you could be held liable for any charges. 
+
+You will be prompted to submit an order form to add the heroku postgres addon to your catcollector project you are deploying on heroku.
+![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2010.34.38%20PM.png)
+
+
+You will then have a new database addon resource available in the resources tab. Which you can then click on to access the database addon.
+![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2010.37.02%20PM.png)
+
+Step 5: After clicking on the new resource addon, you will be taken to a new page that looks like the one below. 
+
+Make sure that you click onto the settings tab, there you should be able to click on the view credentials button and get back all of the information you will need to plug into your environmental variables. 
+
+![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2010.36.19%20PM.png)
+
+We will add those environment variables into our projects settings in the reveal config vars and it will act like our connection string in mongo, except that there are 7 env variables for PSQL. 
+
+These are variables used to configure the connection to the server. They should look very familiar since they are the same as we declared in the project. You can add these to your env if you want to connect your project on your local machine to the heroku server.
+
+![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2010.42.39%20PM.png)
+
 
 
 
