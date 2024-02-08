@@ -1,5 +1,17 @@
 # Django catcollector heroku deployment
 
+
+# REMINDER: FORK AND CLONE IF NEEDED
+The backend for catcollector is here, if you fork this repo be sure to check the checkbox off so that you can get all branches, this will be useful if you want to retrace your steps or redo any section of the build again for practice:
+
+You can just go there and fork this repo then go through the steps to set everything up in heroku including updating the config vars as described above.
+
+[heroku-deployment](https://github.com/Gregorio-Moreta/django-cat-collector/tree/heroku-deployment)
+
+There are also branches throughout the build there so you can check out the branch that left off at django-authentication if you want to actually go through the process and add all of these changes yourself.
+
+[django-authentication](https://github.com/Gregorio-Moreta/django-cat-collector/tree/django-authentication)
+
 # Dependencies
 
 ### Open catcollector app in VScode
@@ -274,22 +286,4 @@ Go test all your routes in postman or with the frontend repo for the catcollecto
 Do both for extra experience that will be useful during the project and beyond!
 
 [catcollector-frontend](https://git.generalassemb.ly/seb-beherenow/catcollector-frontend)
-
-
-##### REMINDER 
-The backend for catcollector is here, if you fork this repo be sure to check the checkbox off so that you can get all branches, this will be useful if you want to retrace your steps or redo any section of the build again for practice:
-
-You can just go there and fork this repo then go through the steps to set everything up in heroku including updating the config vars as described above.
-
-[heroku-deployment](https://github.com/Gregorio-Moreta/django-cat-collector/tree/heroku-deployment)
-
-There are also branches there so you can check out the branch that left off at django-authentication if you want to actually go through the process and add all of these changes yourself.
-
-[django-authentication](https://github.com/Gregorio-Moreta/django-cat-collector/tree/django-authentication)
-
-
-
-
-
-
 
