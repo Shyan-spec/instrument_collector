@@ -15,7 +15,7 @@ pipenv shell
 # Here is a list of all the packages required in order to deploy your django application to heroku.
 
 # Install the following packages:
-pipenv install django-environ django-environ dj-database-url django-heroku whitenoise gunicorn
+pipenv install django-environ dj-database-url django-heroku whitenoise gunicorn
 
 # Go into the documentation and ask GPT for more clarification on these packages as the need arises during the deployment process. 
 # I will try to include comments where relevant for documentation purposes. 
@@ -37,6 +37,18 @@ pipenv install whitenoise
 pipenv install gunicorn
 ```
 Once you have installed all of the packages above you can actually begin to modify your code in preparation of deployment.
+
+## .gitignore
+Add a `.gitignore` file to the root of your project. Add these two lines, this should hide your .env file for sure and also hide the gitignore file if you don't want to push your gitignore up to git either.
+
+```python
+cacollector/.env
+.gitignore
+```
+
+### WARNING
+Do not skip this step. Safeguard your credentials so they don't get accidentally exposed when you push your code to github.
+
 
 ## Procfile ( gunicorn )
 Add a `Procfile` to the root of your project.
@@ -69,19 +81,24 @@ Add an env file to the root of your project folder. `catcollector/.env `
 # You will get the information for these variables when you create the SQL resource in heroku.
 # These variables will be used to configure the database config in settings.py, as you will see further below.
 
+# These are required
+DATABASE_URL=''
+
 SECRET_KEY=''
 
-PGDATABASE=''
+# These are not required.
+# If you want to connect locally to the database you may need them
+# Something to be aware of, nothing more.
 
-PGHOST=''
+# PGDATABASE=''
 
-PGPASSWORD=''
+# PGHOST=''
 
-PGPORT='5432'
+# PGPASSWORD=''
 
-PGUSER=''
+# PGPORT='5432'
 
-DATABASE_URL=''
+# PGUSER=''
 
 ```
 
@@ -90,6 +107,14 @@ DATABASE_URL=''
 All of the following changes will be made in the `catcollector/settings.py` 
 
 We will: 
+
+- Add our imports up at the top of our file
+```python
+import environ  
+import dj_database_url
+import django_heroku
+
+```
 
 ### No package required
 
@@ -108,7 +133,6 @@ ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 ```python
 # catcollector/settings.py
 
-import environ  
 # Initialise environment variables
 env = environ.Env()
 environ.Env.read_env()
@@ -119,13 +143,19 @@ environ.Env.read_env()
 ```python
 # catcollector/settings.py
 
-SECRET_KEY=env('SECRET_KEY')
-PGDATABASE=env('PGDATABASE')
-PGHOST=env('PGHOST')
-PGPASSWORD=env('PGPASSWORD')
-PGPORT=env('PGPORT')
-PGUSER=env('PGUSER')
+# These are required
 DATABASE_URL=env('DATABASE_URL')
+SECRET_KEY=env('SECRET_KEY')
+
+# These are not required.
+# If you want to connect locally to the database you may need them
+# Something to be aware of, nothing more.
+
+# PGDATABASE=env('PGDATABASE')
+# PGHOST=env('PGHOST')
+# PGPASSWORD=env('PGPASSWORD')
+# PGPORT=env('PGPORT')
+# PGUSER=env('PGUSER')
 ```
 
 - Add middleware ( whitenoise )
@@ -172,13 +202,18 @@ django_heroku.settings(locals())
 
 # Heroku
 
-Step 1: Go to https://dashboard.heroku.com/apps and create a new project, call it something like this: django-catcollector.
+#### Step 1: 
 
-Step 2: Go to the deploy tab, next select github as your method of connecting the git repo that you want to deploy. `django-catcollector`
+Go to https://dashboard.heroku.com/apps and create a new project, call it something like this: django-catcollector.
 
-Step 3: Once you have connected the repo, select the branch that you want to deploy. In this case we are deploying the `heroku-deployment` branch.
+#### Step 2: 
+Go to the deploy tab, next select github as your method of connecting the git repo that you want to deploy. `django-catcollector`
 
-Step 4: Go to the resources tab and in the search bar for addons, search `heroku postgres`. 
+#### Step 3: 
+Once you have connected the repo, select the branch that you want to deploy. In this case we are deploying the `heroku-deployment` branch.
+
+#### Step 4: 
+Go to the resources tab and in the search bar for addons, search `heroku postgres`. 
 ![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2010.30.07%20PM.png)
 
 ### WARNING
@@ -191,7 +226,8 @@ You will be prompted to submit an order form to add the heroku postgres addon to
 You will then have a new database addon resource available in the resources tab. Which you can then click on to access the database addon.
 ![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2010.37.02%20PM.png)
 
-Step 5: After clicking on the new resource addon, you will be taken to a new page that looks like the one below. 
+#### Step 5: 
+After clicking on the new resource addon, you will be taken to a new page that looks like the one below. 
 
 Make sure that you click onto the settings tab, there you should be able to click on the view credentials button and get back all of the information you will need to plug into your environmental variables. 
 
@@ -202,6 +238,38 @@ We will add those environment variables into our projects settings in the reveal
 These are variables used to configure the connection to the server. They should look very familiar since they are the same as we declared in the project. You can add these to your env if you want to connect your project on your local machine to the heroku server.
 
 ![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2010.42.39%20PM.png)
+
+
+#### Step 6: 
+##### Heroku config vars
+Now you can configure your Heroku project settings. Click on the button to reveal config vars and you should already have a `DATABASE_URL` variable in your configuration already from the addon. Don't change that, it should be the correct value.
+
+You do however need to add another env variable just for deployment purposes.
+```python
+# add this env variable to your settings config vars on heroku.
+DISABLE_COLLECTSTATIC=1
+```
+
+Failure to do this will lead to an error like this:
+
+![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2011.19.36%20PM.png)
+
+##### This is how your config vars should look like
+![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2011.35.07%20PM.png)
+
+
+### Step 7: 
+##### Deployment
+You should be able to deploy the `heroku-deployment` branch from your catcollector project. Just go to the deployment tab and deploy like normal.
+![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2011.44.16%20PM.png)
+
+##### Cry tears of joy, your django app is deployed!!!
+![resource tab heroku](/Assets/Screen%20Shot%202024-02-07%20at%2011.37.01%20PM.png)
+
+
+
+
+
 
 
 
